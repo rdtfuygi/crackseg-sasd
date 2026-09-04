@@ -1,0 +1,16 @@
+# Training dataset (must never be committed)
+dataset/
+
+# Python bytecode / cache
+__pycache__/
+*.py[cod]
+
+# Training artifacts / model checkpoints (large binaries)
+best_model.pth
+train_log.csv
+*.pth
+*.pt
+
+# Local outputs / logs
+outputs/
+*.log
