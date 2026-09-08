@@ -35,7 +35,7 @@ import torch
 import torch.nn as nn
 from torch.utils.data import DataLoader
 
-from sgcnet import SGCNet
+from crackseg_sasd import CrackSegSASD
 from muon_opti import MuonOpti
 from crack_dataset import CrackDataset, compute_pos_weight
 
@@ -120,7 +120,7 @@ def evaluate_at(
 # Main                                                                        #
 # --------------------------------------------------------------------------- #
 def main() -> None:
-    parser = argparse.ArgumentParser(description="Train SGC-Net for crack segmentation.")
+    parser = argparse.ArgumentParser(description="Train SASD-CrackSeg for crack segmentation.")
     parser.add_argument("--data_root", default=os.path.join(_PROJECT_DIR, "dataset"),
                         help="Root of the dataset directory (train/test/eval).")
     parser.add_argument("--img_size", type=int, default=512,
@@ -178,7 +178,7 @@ def main() -> None:
     pos_weight = torch.tensor([pos_weight_float], dtype=torch.float32)
 
     # --- model / loss / optimizer ----------------------------------------- #
-    model = SGCNet(input_channel=3, output_channel=1).to(device)
+    model = CrackSegSASD(input_channel=3, output_channel=1).to(device)
     criterion = nn.BCEWithLogitsLoss(pos_weight=pos_weight).to(device)
     optimizer = MuonOpti(model.parameters(), lr=args.lr)
 
@@ -190,7 +190,7 @@ def main() -> None:
     n_params = sum(p.numel() for p in model.parameters())
     print(f"[data] train={len(train_ds)}  eval={len(val_ds)}  test={len(test_ds)}")
     print(f"[data] pos_weight (neg/pos/4) = {pos_weight_float:.4f}")
-    print(f"[model] SGC-Net params = {n_params:,}")
+    print(f"[model] SASD-CrackSeg params = {n_params:,}")
     print(f"[config] device={device}  bf16_amp={use_cuda}  batch={args.batch_size}  "
           f"epochs={args.epochs}  lr={args.lr}  img_size={args.img_size}")
     print(f"[thresholds] {thresholds}")

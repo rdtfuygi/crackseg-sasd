@@ -1,4 +1,5 @@
-"""SGC-Net (SwiGLU-Gated Crack Network).
+"""SASD-CrackSeg: a lightweight crack segmentation network with
+stage-aware depthwise separable convolution (SwiGLU-gated).
 
 A shallow 3-level encoder-decoder (U-Net style) with a SwiGLU neck on each
 level and skip connections that fuse the encoder features back into the
@@ -203,8 +204,8 @@ class upsample(nn.Module):
         return self.drop(self.norm(self.up(x) + self.res(x)))
 
 
-class SGCNet(nn.Module):
-    """SGC-Net: 3-level encoder-decoder with skip connections and SwiGLU-gated necks.
+class CrackSegSASD(nn.Module):
+    """SASD-CrackSeg: 3-level encoder-decoder with skip connections and SwiGLU-gated necks.
 
     Encoder: downsample -> SwiGLU neck (residual).  Decoder: upsample + SwiGLU
     neck that fuses each encoder feature (skip connection) through a
@@ -303,7 +304,7 @@ class SGCNet(nn.Module):
 
 if __name__ == '__main__':
     import torchinfo
-    model = SGCNet().eval()
+    model = CrackSegSASD().eval()
     y = model(torch.randn(1, 3, 512, 512))
     print(f"Output shape: {list(y.shape)}")
     s = torchinfo.summary(model, input_size=(1, 3, 512, 512), mode='eval',
