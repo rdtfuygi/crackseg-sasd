@@ -14,3 +14,7 @@ train_log.csv
 # Local outputs / logs
 outputs/
 *.log
+
+# Published model weights (exempt from the *.pth rule)
+!weight/
+!weight/*.pth
